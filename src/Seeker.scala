@@ -22,24 +22,22 @@ trait Seeker {
     ChromoRange(ChromoCoords(c1.toInt, i1.toInt), ChromoCoords(c2.toInt, i2.toInt))
   }
 
-    def snippet(){
-    println("Loading " + path)
-    var lc = 0
-
+  def snippet(size:Int){
+    println("Snipping " + path)
     val sb = new StringBuilder
-
-    val s = Source.fromFile(path)
-    s.getLines.next
-    s.getLines.take(1000 * 10).takeWhile(s=>s.startsWith("chr1")).foreach(line => {
-      println(line)
+    var i=0
+    val s = Source.fromFile(path + """/probes.txt""")
+    s.getLines().next()
+    s.getLines().take(size).foreach(line => {              //.takeWhile(s=>s.startsWith("chr1"))
+      i +=1
+      println( i + "::" + line)
       sb.append(line).append("\r\n")
     })
 
-    val outPath = """C:\Users\Randy\IdeaProjects\BioDiscovery\snippet.txt"""
+    val outPath = path + """/snippet.txt"""
     val out = new PrintWriter(outPath)
-    try{ out.print( sb.toString ) }
-    finally{ out.close }
-//    while(lc < 1000)
+    try{ out.print( sb.toString() ) }
+    finally{ out.close() }
   }
 }
 

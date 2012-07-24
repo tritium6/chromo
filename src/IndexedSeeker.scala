@@ -11,10 +11,10 @@ import java.io.{PrintWriter, File, RandomAccessFile}
 
 class IndexedSeeker(val path:String) extends Seeker{
 
-  private val ixPath = """C:\Users\Randy\IdeaProjects\BioDiscovery\index.txt"""
+  private val ixPath = path + """/index.txt"""
   private val ixFile = new RandomAccessFile(new File(ixPath), "rw")
 
-  private val sourcePath = """C:\Users\Randy\IdeaProjects\BioDiscovery\snippet.txt"""
+  private val sourcePath = path + """/snippet.txt"""
   private val sourceFile = new RandomAccessFile(new File(sourcePath), "r")
 
   private val lineLengthInBytes = 41

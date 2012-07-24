@@ -9,17 +9,16 @@
 object Indexer{
   def main(args:Array[String]) {
     val options = nextOption(Map(), args.toList)
-    val mode = options.getOrElse("mode", "indexed").asInstanceOf[String]
-    val dataPath = options.getOrElse("path", """C:\Users\Randy\IdeaProjects\BioDiscovery\probes.txt""" ).asInstanceOf[String]
-
-//    println("Args:" + mode + " " + dataPath)
+    val mode = options.getOrElse("mode", "binary")
+    val dataPath = options.getOrElse("path", """C:\Users\Randy\IdeaProjects\BioDiscovery\""" )
 
     val seeker = mode match {
       case "binary" => new BinarySeeker(dataPath).asInstanceOf[Seeker]
       case "indexed" => new IndexedSeeker(dataPath).asInstanceOf[Seeker]
     }
 
-    if(options.contains("snippet")) seeker.snippet()
+    options.get("snippet") foreach( size => seeker.snippet(size.toInt) )  //Cheat by shrinking dataset
+
     if(options.contains("index")) seeker.index()
 
     val startTime = System.currentTimeMillis
@@ -62,13 +61,13 @@ object Indexer{
         nextOption(parsedArguments ++ Map("index" -> ""),
         tail)
 
-      case "--snippet" :: tail =>
-        nextOption(parsedArguments ++ Map("snippet" -> ""),
+      case "--snippet" :: value :: tail =>
+        nextOption(parsedArguments ++ Map("snippet" -> value),
         tail)
 
       case unknownOption :: tail =>
-        error("Unknown option " + unknownOption)
-        exit(1)
+        sys.error("Unknown option " + unknownOption)
+        sys.exit(1)
     }
   }
 }
